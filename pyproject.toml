@@ -1,0 +1,9 @@
+[project]
+name = "tyche"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "flet>=0.84.0",
+    "pillow>=12.2.0",
+]
