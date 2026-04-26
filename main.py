@@ -2,7 +2,7 @@
 """
 Authors: Ran# <ran.hash@proton.me>
 Created: 2026/04/26 19:07:46.747401
-Revised: 2026/04/26 20:46:45.191399
+Revised: 2026/04/26 20:52:36.986192
 """
 
 import flet as ft
@@ -436,7 +436,7 @@ def main(page: ft.Page):
             ft.Container(height=28),
         ],
         spacing=16,
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
         expand=True,
     )
 
@@ -448,9 +448,8 @@ def main(page: ft.Page):
                     [
                         ft.Container(
                             content=content,
-                            expand=True,
+                            width=780,
                             padding=ft.Padding.symmetric(horizontal=32),
-                            max_width=780,
                         )
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
