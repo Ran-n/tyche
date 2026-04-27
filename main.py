@@ -2,7 +2,7 @@
 """
 Authors: Ran# <ran.hash@proton.me>
 Created: 2026/04/26 19:07:46.747401
-Revised: 2026/04/27 09:12:35.057669
+Revised: 2026/04/27 09:14:35.986319
 """
 
 import flet as ft
@@ -468,11 +468,15 @@ def main(page: ft.Page):
 
 
 class _DropDisconnect(logging.Filter):
+    _NOISE = ("ClientDisconnected", "WebSocketDisconnect", "ConnectionClosedOK")
+
     def filter(self, record: logging.LogRecord) -> bool:
-        return "ClientDisconnected" not in record.getMessage()
+        msg = record.getMessage()
+        return not any(kw in msg for kw in self._NOISE)
 
 
-logging.getLogger("uvicorn.error").addFilter(_DropDisconnect())
+for _logger in ("uvicorn.error", "uvicorn.access"):
+    logging.getLogger(_logger).addFilter(_DropDisconnect())
 
 try:
     import flet_web
