@@ -1,7 +1,7 @@
 [//]: # ( ---------------------------------------------------------------------- )
 [//]: # (+ Authors: 	Ran# <ran.hash@proton.me> )
 [//]: # (+ Created: 	2026/04/26 20:50:05.000000 )
-[//]: # (+ Revised: 	2026/04/27 09:38:44.224481 )
+[//]: # (+ Revised: 	2026/04/27 09:40:24.217172 )
 [//]: # ( ---------------------------------------------------------------------- )
 
 # Tyche
@@ -28,12 +28,12 @@ flet run --web main.py
 
 The interface is available in the following languages, selectable at runtime via a flag dropdown:
 
-| Code | Language |
-|---|---|
-| `en` | English |
-| `es` | Spanish |
-| `gl` | Galician |
-| `eo` | Esperanto |
+| Flag | Code | Language |
+|---|---|---|
+| ![](assets/flag_gl.svg) | `gl` | Galician |
+| ![](assets/flag_en.svg) | `en` | English |
+| ![](assets/flag_es.svg) | `es` | Spanish |
+| ![](assets/flag_eo.svg) | `eo` | Esperanto |
 
 ## Options
 
