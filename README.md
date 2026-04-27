@@ -1,3 +1,9 @@
+[//]: # ( ---------------------------------------------------------------------- )
+[//]: # (+ Authors: 	Ran# <ran.hash@proton.me> )
+[//]: # (+ Created: 	2026/04/26 20:50:05.000000 )
+[//]: # (+ Revised: 	2026/04/27 09:38:44.224481 )
+[//]: # ( ---------------------------------------------------------------------- )
+
 # Tyche
 
 Tyche (Τύχη) was the Greek goddess of fortune, luck, and chance — the force that governed the unpredictable outcomes of human affairs. In art she is often depicted holding a rudder, steering fate, and a cornucopia overflowing with the bounty she might bestow or withhold. The name is a fitting one for a tool whose sole purpose is to let chance decide.
@@ -17,6 +23,17 @@ python main.py
 ```
 flet run --web main.py
 ```
+
+## Languages
+
+The interface is available in the following languages, selectable at runtime via a flag dropdown:
+
+| Code | Language |
+|---|---|
+| `en` | English |
+| `es` | Spanish |
+| `gl` | Galician |
+| `eo` | Esperanto |
 
 ## Options
 

@@ -2,7 +2,7 @@
 """
 Authors: Ran# <ran.hash@proton.me>
 Created: 2026/04/26 19:07:46.747401
-Revised: 2026/04/27 09:33:51.518918
+Revised: 2026/04/27 09:36:53.762415
 """
 
 import flet as ft
@@ -73,8 +73,8 @@ STRINGS = {
 
 LANGS = [
     ("en", "flag_en.svg"),
-    ("es", "flag_es.svg"),
     ("gl", "flag_gl.svg"),
+    ("es", "flag_es.svg"),
     ("eo", "flag_eo.svg"),
 ]
 
@@ -455,6 +455,16 @@ def main(page: ft.Page):
         horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
         expand=True,
     )
+
+    # ── keyboard shortcuts ─────────────────────────────────────────────────
+    def on_keyboard(e: ft.KeyboardEvent):
+        if e.key == "Escape":
+            if dropdown_open:
+                toggle_dropdown()
+            else:
+                on_clear(None)
+
+    page.on_keyboard_event = on_keyboard
 
     # ── layout ─────────────────────────────────────────────────────────────
     page.add(
