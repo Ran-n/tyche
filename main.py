@@ -2,10 +2,11 @@
 """
 Authors: Ran# <ran.hash@proton.me>
 Created: 2026/04/26 19:07:46.747401
-Revised: 2026/04/26 20:52:36.986192
+Revised: 2026/04/27 09:12:35.057669
 """
 
 import flet as ft
+import logging
 import random
 import shutil
 from pathlib import Path
@@ -466,6 +467,13 @@ def main(page: ft.Page):
     )
 
 
+class _DropDisconnect(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        return "ClientDisconnected" not in record.getMessage()
+
+
+logging.getLogger("uvicorn.error").addFilter(_DropDisconnect())
+
 try:
     import flet_web
 
@@ -479,3 +487,6 @@ except Exception:
 app = ft.run(
     main, assets_dir=str(Path(__file__).parent / "assets"), export_asgi_app=True
 )
+
+if __name__ == "__main__":
+    ft.run(main, assets_dir=str(Path(__file__).parent / "assets"))
