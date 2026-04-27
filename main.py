@@ -2,7 +2,7 @@
 """
 Authors: Ran# <ran.hash@proton.me>
 Created: 2026/04/26 19:07:46.747401
-Revised: 2026/04/27 09:14:35.986319
+Revised: 2026/04/27 09:33:51.518918
 """
 
 import flet as ft
@@ -55,12 +55,27 @@ STRINGS = {
         "tip_n": "Cantidade — cantos números sortear",
         "tip_m": "Total — tamaño do grupo",
     },
+    "eo": {
+        "subtitle": "hazarda nombro-elektilo",
+        "pick_n": "kvanto",
+        "from_m": "totalo",
+        "replacement": "ripeto",
+        "draw": "Tiri",
+        "clear": "Forigi",
+        "hint": "premu Tiri por elekti nombrojn",
+        "err_int": "N kaj M devas esti entjeroj.",
+        "err_zero": "N kaj M devas esti pli grandaj ol nulo.",
+        "err_range": "Ne eblas elekti {n} unikajn nombrojn el 1…{m}.",
+        "tip_n": "Kvanto — kiom da nombroj tiri",
+        "tip_m": "Totalo — grando de la grupo",
+    },
 }
 
 LANGS = [
     ("en", "flag_en.svg"),
     ("es", "flag_es.svg"),
     ("gl", "flag_gl.svg"),
+    ("eo", "flag_eo.svg"),
 ]
 
 
