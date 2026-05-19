@@ -240,7 +240,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "flet", specifier = ">=0.84.0" },
-    { name = "pillow", specifier = ">=12.2.0" },
+    { name = "pillow", specifier = ">=10.2.0" },
 ]
 
 [[package]]
