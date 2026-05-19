@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 #+ Authors: 	Ran# <ran.hash@proton.me>
 #+ Created: 	2026/04/27 07:27:22.299253
-#+ Revised: 	2026/05/19 22:45:51.761298
+#+ Revised: 	2026/05/19 23:05:50.786916
 # ------------------------------------------------------------------------------
 
 name: Deploy to GitHub Pages
@@ -50,7 +50,6 @@ jobs:
             --no-web-splash \
             --project tyche \
             --product Tyche \
-            --flutter-path "$FLUTTER_ROOT" \
             .
 
       - name: Upload Pages artifact
