@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 #+ Authors: 	Ran# <ran.hash@proton.me>
 #+ Created: 	2026/04/27 07:27:22.299253
-#+ Revised: 	2026/04/27 07:27:22.299253
+#+ Revised: 	2026/05/19 22:45:51.761298
 # ------------------------------------------------------------------------------
 
 name: Deploy to GitHub Pages
@@ -36,6 +36,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: "3.41.4"
           channel: stable
 
       - name: Install dependencies
@@ -49,6 +50,7 @@ jobs:
             --no-web-splash \
             --project tyche \
             --product Tyche \
+            --flutter-path "$FLUTTER_ROOT" \
             .
 
       - name: Upload Pages artifact

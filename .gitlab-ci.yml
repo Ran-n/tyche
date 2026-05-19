@@ -1,0 +1,19 @@
+# ------------------------------------------------------------------------------
+#+ Authors: 	Ran# <ran.hash@proton.me>
+#+ Created: 	2026/05/19 22:44:40.863011
+#+ Revised: 	2026/05/19 22:44:40.863011
+# ------------------------------------------------------------------------------
+
+image: python:3.12-slim
+
+pages:
+  stage: deploy
+  script:
+    - pip install uv
+    - uv pip install --system flet
+    - flet publish main.py --base-url /tyche/ --distpath public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
