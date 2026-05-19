@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 #+ Authors: 	Ran# <ran.hash@proton.me>
 #+ Created: 	2026/04/27 07:27:22.299253
-#+ Revised: 	2026/05/19 23:05:50.786916
+#+ Revised: 	2026/05/19 23:09:13.091643
 # ------------------------------------------------------------------------------
 
 name: Deploy to GitHub Pages
@@ -50,6 +50,7 @@ jobs:
             --no-web-splash \
             --project tyche \
             --product Tyche \
+            --exclude pillow \
             .
 
       - name: Upload Pages artifact
