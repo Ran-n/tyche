@@ -1,14 +1,14 @@
 # ------------------------------------------------------------------------------
 #+ Authors: 	Ran# <ran.hash@proton.me>
 #+ Created: 	2026/04/27 07:27:22.299253
-#+ Revised: 	2026/05/19 23:18:02.341518
+#+ Revised: 	2026/05/20 08:25:55.708417
 # ------------------------------------------------------------------------------
 
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
