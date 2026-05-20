@@ -25,6 +25,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Persist language selection across sessions via `localStorage` (web) and `page.client_storage` (desktop) (2026-05-20)
 - Persist quantity, total, and replacement toggle across sessions (2026-05-20)
+- `[project.scripts]` entry `tyche = "main:run"` for pip-installed invocation (2026-05-20)
+- Migrate persistence layer from `client_storage` to `shared_preferences` async API (2026-05-20)
+- `run()` wrapper function; `__main__` block delegates to it (2026-05-20)
+
+### Build
+
+- Switch build backend from virtual to hatchling; add `[build-system]` and `[tool.hatch.build.targets.wheel]` (2026-05-20)
+- Drop Pillow dependency (2026-05-20)
+- Set `[tool.uv] package = true` (2026-05-20)
+- Bump `line-length` from 88 to 120 (2026-05-20)
 
 ### Fixed
 

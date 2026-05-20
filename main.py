@@ -2,7 +2,7 @@
 """
 Authors: Ran# <ran.hash@proton.me>
 Created: 2026/04/26 19:07:46.747401
-Revised: 2026/05/20 08:33:02.374446
+Revised: 2026/05/20 08:43:59.194920
 """
 
 import logging
@@ -79,7 +79,7 @@ LANGS = [
 ]
 
 
-def main(page: ft.Page):
+async def main(page: ft.Page):
     page.title = "Tyche"
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = "#080810"
@@ -89,7 +89,8 @@ def main(page: ft.Page):
     page.fonts = {"mono": "Courier New"}
 
     selected: list[int] = []
-    lang = page.client_storage.get("lang") or "en"
+    sp = page.shared_preferences
+    lang = (await sp.get("lang")) or "en"
 
     def t(key: str, **kwargs) -> str:
         s = STRINGS[lang][key]
@@ -127,22 +128,20 @@ def main(page: ft.Page):
 
     n_field = ft.TextField(
         label=t("pick_n"),
-        value=page.client_storage.get("n") or "6",
+        value=(await sp.get("n")) or "6",
         tooltip=t("tip_n"),
         **field_style,
     )
     m_field = ft.TextField(
         label=t("from_m"),
-        value=page.client_storage.get("m") or "10",
+        value=(await sp.get("m")) or "10",
         tooltip=t("tip_m"),
         **field_style,
     )
 
     replacement_toggle = ft.Switch(
         label=t("replacement"),
-        value=page.client_storage.get("replacement")
-        if page.client_storage.contains_key("replacement")
-        else False,
+        value=(await sp.get("replacement")) if (await sp.contains_key("replacement")) else False,
         active_color="#a78bfa",
         inactive_thumb_color="#2a2a45",
     )
@@ -234,9 +233,7 @@ def main(page: ft.Page):
 
     def refresh_ui():
         if selected:
-            result_wrap.controls = [
-                build_chip(num, i) for i, num in enumerate(selected)
-            ]
+            result_wrap.controls = [build_chip(num, i) for i, num in enumerate(selected)]
             result_area.content = ft.Column(
                 [result_wrap],
                 alignment=ft.MainAxisAlignment.CENTER,
@@ -250,7 +247,7 @@ def main(page: ft.Page):
         page.update()
 
     # ── handlers ───────────────────────────────────────────────────────────
-    def on_draw(e):
+    async def on_draw(e):
         error_text.visible = False
         try:
             n = int(n_field.value or 0)
@@ -271,15 +268,13 @@ def main(page: ft.Page):
             page.update()
             return
 
-        page.client_storage.set("n", str(n))
-        page.client_storage.set("m", str(m))
-        page.client_storage.set("replacement", replacement_toggle.value)
+        await sp.set("n", str(n))
+        await sp.set("m", str(m))
+        await sp.set("replacement", replacement_toggle.value)
         nonlocal selected
         population = list(range(1, m + 1))
         selected = (
-            [random.choice(population) for _ in range(n)]
-            if replacement_toggle.value
-            else random.sample(population, n)
+            [random.choice(population) for _ in range(n)] if replacement_toggle.value else random.sample(population, n)
         )
         refresh_ui()
 
@@ -333,7 +328,7 @@ def main(page: ft.Page):
     def make_dropdown_item(code: str) -> ft.Container:
         return ft.Container(
             content=ft.Image(src=lang_svg(code), width=26, height=17),
-            on_click=lambda _, c=code: select_lang(c),
+            on_click=lambda _, c=code: page.run_task(select_lang, c),
             border_radius=5,
             bgcolor="transparent",
             padding=ft.Padding.symmetric(horizontal=6, vertical=4),
@@ -374,16 +369,14 @@ def main(page: ft.Page):
         nonlocal dropdown_open
         dropdown_open = not dropdown_open
         if dropdown_open:
-            dropdown_col.controls = [
-                make_dropdown_item(c) for c, _ in LANGS if c != lang
-            ]
+            dropdown_col.controls = [make_dropdown_item(c) for c, _ in LANGS if c != lang]
         dropdown_panel.visible = dropdown_open
         page.update()
 
-    def select_lang(code: str):
+    async def select_lang(code: str):
         nonlocal lang, dropdown_open
         lang = code
-        page.client_storage.set("lang", code)
+        await sp.set("lang", code)
         dropdown_open = False
         dropdown_panel.visible = False
         current_flag.content = ft.Image(src=lang_svg(lang), width=26, height=17)
@@ -518,16 +511,17 @@ for _logger in ("uvicorn.error", "uvicorn.access"):
 try:
     import flet_web
 
-    _loading_target = (
-        Path(flet_web.__file__).parent / "web" / "icons" / "loading-animation.png"
-    )
+    _loading_target = Path(flet_web.__file__).parent / "web" / "icons" / "loading-animation.png"
     shutil.copy(Path(__file__).parent / "assets" / "icon.png", _loading_target)
 except Exception:
     pass
 
-app = ft.run(
-    main, assets_dir=str(Path(__file__).parent / "assets"), export_asgi_app=True
-)
+app = ft.run(main, assets_dir=str(Path(__file__).parent / "assets"), export_asgi_app=True)
+
+
+def run():
+    ft.run(main, assets_dir=str(Path(__file__).parent / "assets"))
+
 
 if __name__ == "__main__":
-    ft.run(main, assets_dir=str(Path(__file__).parent / "assets"))
+    run()

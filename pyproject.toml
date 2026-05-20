@@ -15,18 +15,29 @@ classifiers = [
     "Topic :: Games/Entertainment",
 ]
 requires-python = ">=3.12"
-dependencies = [
-    "flet>=0.84.0",
-]
+dependencies = ["flet>=0.84.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+tyche = "main:run"
 
 [project.urls]
 Homepage = "https://github.com/Ran-n/tyche"
 Repository = "https://github.com/Ran-n/tyche"
 Changelog = "https://github.com/Ran-n/tyche/blob/main/CHANGELOG.md"
 
+[tool.hatch.build.targets.wheel]
+include = ["main.py"]
+
+[tool.uv]
+package = true
+
 [tool.ruff]
 target-version = "py312"
-line-length = 88
+line-length = 120
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
