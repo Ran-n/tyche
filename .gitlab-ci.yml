@@ -1,17 +1,16 @@
 # ------------------------------------------------------------------------------
 #+ Authors: 	Ran# <ran.hash@proton.me>
 #+ Created: 	2026/05/19 22:44:40.863011
-#+ Revised: 	2026/05/19 22:44:40.863011
+#+ Revised: 	2026/05/20 08:12:13.637740
 # ------------------------------------------------------------------------------
-
-image: python:3.12-slim
 
 pages:
   stage: deploy
+  image: alpine:3.21
   script:
-    - pip install uv
-    - uv pip install --system flet
-    - flet publish main.py --distpath public
+    - mkdir -p public
+    - cp web/index.html public/index.html
+    - cp assets/favicon.png public/favicon.png
   artifacts:
     paths:
       - public

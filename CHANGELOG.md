@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Build
 
+- GitHub Pages: simplified workflow to upload pre-built `web/` dir, removing Flutter/Python build steps (2026-05-20)
+- GitLab Pages: switched to `alpine:3.21` image, serving pre-built `web/index.html` without flet/uv (2026-05-20)
+- Added pre-built `web/index.html` to repository (2026-05-20)
 - GitLab Pages deployment via `flet publish` (2026-05-19)
 
 ### Documentation
