@@ -2,7 +2,31 @@
 name = "tyche"
 version = "0.1.0"
 description = "Cross-platform random number selector — draws N numbers from 1…M, with or without replacement"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Ran#", email = "ran.hash@proton.me" }]
+keywords = ["random", "lottery", "sampling", "flet", "desktop", "web"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Environment :: Other Environment",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Games/Entertainment",
+]
 requires-python = ">=3.12"
 dependencies = [
     "flet>=0.84.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Ran-n/tyche"
+Repository = "https://github.com/Ran-n/tyche"
+Changelog = "https://github.com/Ran-n/tyche/blob/main/CHANGELOG.md"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

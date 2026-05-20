@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Build
 
+- `pyproject.toml`: add PEP 621 metadata — readme, license, authors, keywords, classifiers, project URLs, ruff config (2026-05-20)
 - GitHub Pages: fix workflow trigger branch `master` → `main` (2026-05-20)
 - GitLab Pages: fix pipeline rule branch `master` → `main` (2026-05-20)
 - GitHub Pages: simplified workflow to upload pre-built `web/` dir, removing Flutter/Python build steps (2026-05-20)
