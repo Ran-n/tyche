@@ -11,7 +11,7 @@ pages:
   script:
     - pip install uv
     - uv pip install --system flet
-    - flet publish main.py --base-url /tyche/ --distpath public
+    - flet publish main.py --distpath public
   artifacts:
     paths:
       - public

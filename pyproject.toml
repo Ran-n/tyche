@@ -1,9 +1,8 @@
 [project]
 name = "tyche"
 version = "0.1.0"
-description = "Add your description here"
+description = "Cross-platform random number selector — draws N numbers from 1…M, with or without replacement"
 requires-python = ">=3.12"
 dependencies = [
     "flet>=0.84.0",
-    "pillow>=10.2.0",
 ]

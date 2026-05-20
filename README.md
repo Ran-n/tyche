@@ -1,10 +1,10 @@
 [//]: # ( ---------------------------------------------------------------------- )
 [//]: # (+ Authors: 	Ran# <ran.hash@proton.me> )
 [//]: # (+ Created: 	2026/04/26 20:50:05.000000 )
-[//]: # (+ Revised: 	2026/04/27 09:40:24.217172 )
+[//]: # (+ Revised: 	2026/05/19 23:34:30.416907 )
 [//]: # ( ---------------------------------------------------------------------- )
 
-# Tyche
+# [Tyche](https://github.com/Ran-n/tyche)
 
 Tyche (Τύχη) was the Greek goddess of fortune, luck, and chance — the force that governed the unpredictable outcomes of human affairs. In art she is often depicted holding a rudder, steering fate, and a cornucopia overflowing with the bounty she might bestow or withhold. The name is a fitting one for a tool whose sole purpose is to let chance decide.
 

@@ -47,7 +47,6 @@ jobs:
           uv run flet build web \
             --base-url /tyche/ \
             --route-url-strategy hash \
-            --no-web-splash \
             --project tyche \
             --product Tyche \
             .
