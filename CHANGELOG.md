@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Persist language selection across sessions via `localStorage` (web) and `page.client_storage` (desktop) (2026-05-20)
+- Persist quantity, total, and replacement toggle across sessions (2026-05-20)
 
 ### Fixed
 

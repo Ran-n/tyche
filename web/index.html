@@ -314,11 +314,11 @@
     <div id="inputs-row">
       <div class="field-wrap">
         <label id="label-n" for="field-n"></label>
-        <input id="field-n" type="number" value="6" min="1">
+        <input id="field-n" type="number" min="1">
       </div>
       <div class="field-wrap">
         <label id="label-m" for="field-m"></label>
-        <input id="field-m" type="number" value="10" min="1">
+        <input id="field-m" type="number" min="1">
       </div>
       <div class="toggle-wrap">
         <label id="label-rep" for="rep-toggle"></label>
@@ -518,6 +518,10 @@ function onDraw() {
   const withReplacement = document.getElementById('rep-toggle').checked;
   if (!withReplacement && n > m) { showError(t('err_range', {n, m})); return; }
 
+  localStorage.setItem('n', n);
+  localStorage.setItem('m', m);
+  localStorage.setItem('replacement', withReplacement);
+
   const pool = Array.from({length: m}, (_, i) => i + 1);
   if (withReplacement) {
     selected = Array.from({length: n}, () => pool[Math.floor(Math.random() * m)]);
@@ -548,6 +552,9 @@ document.addEventListener('keydown', e => {
 });
 
 // init
+document.getElementById('field-n').value = localStorage.getItem('n') || '6';
+document.getElementById('field-m').value = localStorage.getItem('m') || '10';
+document.getElementById('rep-toggle').checked = localStorage.getItem('replacement') === 'true';
 applyLang();
 renderResults();
 </script>

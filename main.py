@@ -2,15 +2,15 @@
 """
 Authors: Ran# <ran.hash@proton.me>
 Created: 2026/04/26 19:07:46.747401
-Revised: 2026/05/20 08:24:03.533439
+Revised: 2026/05/20 08:33:02.374446
 """
 
-import flet as ft
 import logging
 import random
 import shutil
 from pathlib import Path
 
+import flet as ft
 
 STRINGS = {
     "en": {
@@ -126,15 +126,23 @@ def main(page: ft.Page):
     )
 
     n_field = ft.TextField(
-        label=t("pick_n"), value="6", tooltip=t("tip_n"), **field_style
+        label=t("pick_n"),
+        value=page.client_storage.get("n") or "6",
+        tooltip=t("tip_n"),
+        **field_style,
     )
     m_field = ft.TextField(
-        label=t("from_m"), value="10", tooltip=t("tip_m"), **field_style
+        label=t("from_m"),
+        value=page.client_storage.get("m") or "10",
+        tooltip=t("tip_m"),
+        **field_style,
     )
 
     replacement_toggle = ft.Switch(
         label=t("replacement"),
-        value=False,
+        value=page.client_storage.get("replacement")
+        if page.client_storage.contains_key("replacement")
+        else False,
         active_color="#a78bfa",
         inactive_thumb_color="#2a2a45",
     )
@@ -263,6 +271,9 @@ def main(page: ft.Page):
             page.update()
             return
 
+        page.client_storage.set("n", str(n))
+        page.client_storage.set("m", str(m))
+        page.client_storage.set("replacement", replacement_toggle.value)
         nonlocal selected
         population = list(range(1, m + 1))
         selected = (
