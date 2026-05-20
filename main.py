@@ -2,7 +2,7 @@
 """
 Authors: Ran# <ran.hash@proton.me>
 Created: 2026/04/26 19:07:46.747401
-Revised: 2026/04/27 09:36:53.762415
+Revised: 2026/05/20 08:24:03.533439
 """
 
 import flet as ft
@@ -89,7 +89,7 @@ def main(page: ft.Page):
     page.fonts = {"mono": "Courier New"}
 
     selected: list[int] = []
-    lang = "en"
+    lang = page.client_storage.get("lang") or "en"
 
     def t(key: str, **kwargs) -> str:
         s = STRINGS[lang][key]
@@ -372,6 +372,7 @@ def main(page: ft.Page):
     def select_lang(code: str):
         nonlocal lang, dropdown_open
         lang = code
+        page.client_storage.set("lang", code)
         dropdown_open = False
         dropdown_panel.visible = False
         current_flag.content = ft.Image(src=lang_svg(lang), width=26, height=17)

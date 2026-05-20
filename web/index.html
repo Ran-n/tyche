@@ -405,7 +405,7 @@ const COLORS = [
   '#ef4444','#22d3ee',
 ];
 
-let lang = 'en';
+let lang = localStorage.getItem('lang') || 'en';
 let selected = [];
 
 function t(key, vars = {}) {
@@ -443,6 +443,7 @@ function renderDropdown() {
 
 function selectLang(code) {
   lang = code;
+  localStorage.setItem('lang', code);
   closeDropdown();
   applyLang();
 }

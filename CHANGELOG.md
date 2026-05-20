@@ -18,6 +18,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - README title linked to GitHub repository (2026-05-20)
 - `pyproject.toml` description filled in (2026-05-20)
 
+### Added
+
+- Persist language selection across sessions via `localStorage` (web) and `page.client_storage` (desktop) (2026-05-20)
+
 ### Fixed
 
 - Relax Pillow constraint for Pyodide compatibility (2026-05-19)
