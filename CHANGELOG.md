@@ -47,6 +47,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Restyle web UI with the Gruvbox palette and a breren-style light/dark toggle (2026-08-05)
 - Rework language picker to breren's trigger + listbox pattern, with browser-language auto-detection (2026-08-05)
 - Light mode uses a neutral white/grey page instead of Gruvbox's cream `bg0`, keeping accents (orange, chip colors) authentically Gruvbox (2026-08-05)
+- Draw button switched from the orange accent to an inverted ink/page fill, keeping orange reserved for smaller accents (2026-08-05)
 
 ## [0.1.0] — 2026-04-27
 
