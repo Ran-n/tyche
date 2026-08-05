@@ -12,9 +12,47 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Gruvbox palette: https://github.com/morhetz/gruvbox
+       Light mode swaps Gruvbox's bg0 (a warm cream) for a neutral white
+       page — full-bleed cream reads heavy at page scale — while keeping
+       every accent (orange, chip colors, foreground text) authentically
+       Gruvbox. Dark mode uses the palette as-is. */
+    :root { color-scheme: light dark; }
+    :root, :root[data-theme="light"] {
+      --bg: #f7f6f4;          /* neutral, not Gruvbox */
+      --bg-alt: #efeeec;      /* neutral, not Gruvbox */
+      --fg: #3c3836;          /* gruvbox light fg1 */
+      --fg-muted: #7c6f64;    /* gruvbox light fg4 */
+      --fg-faint: #bdae93;    /* gruvbox light fg3 */
+      --card-bg: #ffffff;     /* neutral, not Gruvbox */
+      --card-border: #e2ddd4; /* neutral, not Gruvbox */
+      --accent: #d65d0e;      /* gruvbox light orange */
+      --danger: #9d0006;      /* gruvbox light faded red */
+      --shadow: rgba(60, 45, 20, 0.10);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #282828;          /* gruvbox dark bg0 */
+        --bg-alt: #1d2021;      /* gruvbox dark bg0_h */
+        --fg: #ebdbb2;          /* gruvbox dark fg1 */
+        --fg-muted: #a89984;    /* gruvbox dark fg4 */
+        --fg-faint: #504945;    /* gruvbox dark bg2 */
+        --card-bg: #3c3836;     /* gruvbox dark bg1 */
+        --card-border: #504945; /* gruvbox dark bg2 */
+        --accent: #fe8019;      /* gruvbox dark bright orange */
+        --danger: #fb4934;      /* gruvbox dark bright red */
+        --shadow: rgba(0, 0, 0, 0.45);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #282828; --bg-alt: #1d2021; --fg: #ebdbb2; --fg-muted: #a89984; --fg-faint: #504945;
+      --card-bg: #3c3836; --card-border: #504945; --accent: #fe8019; --danger: #fb4934;
+      --shadow: rgba(0, 0, 0, 0.45);
+    }
+
     body {
-      background: #080810;
-      color: #fff;
+      background: var(--bg);
+      color: var(--fg);
       font-family: system-ui, sans-serif;
       min-height: 100dvh;
       display: flex;
@@ -40,72 +78,109 @@
     header h1 {
       font-size: 48px;
       font-weight: 800;
-      color: #6d59f0;
+      color: var(--fg);
       letter-spacing: 8px;
     }
     #subtitle {
       font-size: 12px;
-      color: #383858;
+      color: var(--fg-muted);
       letter-spacing: 1px;
       margin-top: 2px;
     }
 
-    /* ── language switcher ── */
-    #lang-switcher {
+    /* ── toolbar (language picker + theme toggle) ── */
+    #toolbar {
       position: fixed;
       top: 14px;
       right: 16px;
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 4px;
+      align-items: center;
+      gap: 8px;
       z-index: 100;
     }
-    .flag-btn {
-      background: #0f0f1e;
-      border: 1px solid #222240;
-      border-radius: 6px;
-      padding: 5px 7px;
-      cursor: pointer;
+
+    .lang-picker { position: relative; }
+    .lang-trigger {
       display: flex;
       align-items: center;
-      transition: background 120ms ease-out;
-    }
-    .flag-btn:hover { background: #16162a; }
-    .flag-btn svg { width: 26px; height: 17px; display: block; }
-    #lang-dropdown {
-      background: #0a0a18;
-      border: 1px solid #222240;
+      gap: 6px;
+      font: inherit;
+      cursor: pointer;
+      border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 4px;
-      display: none;
-      flex-direction: column;
-      gap: 4px;
+      background: var(--card-bg);
+      color: var(--fg);
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: border-color 120ms ease-out;
     }
-    #lang-dropdown.open { display: flex; }
+    .lang-trigger:hover { border-color: var(--accent); }
+    .lang-trigger .flag svg { width: 22px; height: 15px; display: block; }
+    .lang-trigger .chevron { color: var(--fg-muted); font-size: 9px; }
+
+    #lang-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      margin: 0;
+      padding: 4px;
+      list-style: none;
+      width: 9.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+    #lang-menu[hidden] { display: none; }
     .lang-option {
-      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
       border: none;
       border-radius: 5px;
-      padding: 4px 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
+      background: transparent;
+      color: var(--fg);
+      padding: 6px 7px;
+      font-size: 12px;
       transition: background 120ms ease-out;
     }
-    .lang-option:hover { background: #14142a; }
-    .lang-option svg { width: 26px; height: 17px; display: block; }
+    .lang-option:hover { background: var(--bg-alt); }
+    .lang-option[aria-selected="true"] { font-weight: 700; color: var(--accent); }
+    .lang-option svg { width: 22px; height: 15px; display: block; }
+
+    .theme-btn {
+      font: inherit;
+      cursor: pointer;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--card-bg);
+      color: var(--fg-muted);
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: border-color 120ms ease-out;
+    }
+    .theme-btn:hover { border-color: var(--accent); }
 
     /* ── controls card ── */
     #controls-card {
-      background: #09091a;
-      border: 1px solid #14142a;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 24px 32px;
       display: flex;
       flex-direction: column;
       gap: 20px;
       align-items: center;
+      box-shadow: 0 2px 10px var(--shadow);
     }
     #inputs-row {
       display: flex;
@@ -122,15 +197,15 @@
     }
     .field-wrap label {
       font-size: 13px;
-      color: #7c6af7;
+      color: var(--fg-muted);
       font-weight: 500;
       text-align: center;
     }
     .field-wrap input[type="number"] {
       background: transparent;
       border: none;
-      border-bottom: 1px solid #2a2a45;
-      color: #fff;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--fg);
       font-size: 24px;
       text-align: center;
       padding: 4px 0 6px;
@@ -141,7 +216,7 @@
     }
     .field-wrap input[type="number"]::-webkit-inner-spin-button,
     .field-wrap input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .field-wrap input[type="number"]:focus { border-bottom-color: #a78bfa; }
+    .field-wrap input[type="number"]:focus { border-bottom-color: var(--accent); }
 
     /* toggle */
     .toggle-wrap {
@@ -152,7 +227,7 @@
     }
     .toggle-wrap label {
       font-size: 13px;
-      color: #7c6af7;
+      color: var(--fg-muted);
       font-weight: 500;
     }
     .switch {
@@ -164,7 +239,8 @@
     .slider {
       position: absolute;
       inset: 0;
-      background: #1a1a30;
+      background: var(--bg-alt);
+      border: 1px solid var(--card-border);
       border-radius: 26px;
       cursor: pointer;
       transition: background 200ms;
@@ -174,16 +250,16 @@
       position: absolute;
       width: 18px;
       height: 18px;
-      left: 4px;
-      top: 4px;
+      left: 3px;
+      top: 3px;
       border-radius: 50%;
-      background: #2a2a45;
+      background: var(--fg-faint);
       transition: transform 200ms, background 200ms;
     }
-    .switch input:checked + .slider { background: #5b48e033; }
+    .switch input:checked + .slider { border-color: var(--accent); }
     .switch input:checked + .slider::before {
       transform: translateX(22px);
-      background: #a78bfa;
+      background: var(--accent);
     }
 
     /* buttons */
@@ -207,20 +283,20 @@
     .btn:hover { filter: brightness(1.1); }
     .btn:active { filter: brightness(0.9); }
     #draw-btn {
-      background: #5b48e0;
-      color: #fff;
+      background: var(--accent);
+      color: var(--fg);
       padding: 16px 36px;
     }
     #clear-btn {
-      background: #0d0d1a;
-      color: #555577;
+      background: transparent;
+      color: var(--fg-muted);
       padding: 16px 28px;
-      border: 1px solid #222240;
+      border: 1px solid var(--card-border);
     }
     .btn svg { width: 16px; height: 16px; }
 
     #error-text {
-      color: #f87171;
+      color: var(--danger);
       font-size: 12px;
       text-align: center;
       display: none;
@@ -228,8 +304,8 @@
 
     /* ── result area ── */
     #result-area {
-      background: #07070f;
-      border: 1px solid #14142a;
+      background: var(--bg-alt);
+      border: 1px solid var(--card-border);
       border-radius: 20px;
       padding: 24px;
       display: flex;
@@ -246,11 +322,11 @@
     #hint-icon {
       width: 52px;
       height: 52px;
-      color: #1c1c35;
-      fill: #1c1c35;
+      color: var(--fg-faint);
+      fill: var(--fg-faint);
     }
     #hint-text {
-      color: #2a2a45;
+      color: var(--fg-muted);
       font-size: 13px;
       text-align: center;
     }
@@ -278,14 +354,14 @@
       width: 86px;
       height: 86px;
       border-radius: 20px;
-      background: #0a0a18;
+      background: var(--card-bg);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 28px;
       font-weight: 700;
       font-family: 'Courier New', monospace;
-      color: #fff;
+      color: var(--fg);
       border: 1.5px solid;
       animation: pop 250ms ease-out;
     }
@@ -297,11 +373,16 @@
 </head>
 <body>
 
-<div id="lang-switcher">
-  <button class="flag-btn" id="lang-current" aria-label="Language" title="EN">
-    <!-- replaced by JS -->
-  </button>
-  <div id="lang-dropdown"></div>
+<div id="toolbar">
+  <div class="lang-picker">
+    <button class="lang-trigger" id="lang-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+      <span class="flag" id="lang-trigger-flag"></span>
+      <span id="lang-trigger-name"></span>
+      <span class="chevron">▾</span>
+    </button>
+    <ul id="lang-menu" role="listbox" hidden></ul>
+  </div>
+  <button class="theme-btn" id="theme-toggle" type="button"></button>
 </div>
 
 <div id="app">
@@ -360,6 +441,8 @@ const STRINGS = {
     err_int: "N and M must be whole numbers.",
     err_zero: "N and M must be greater than zero.",
     err_range: "Can’t pick {n} unique numbers from 1…{m}.",
+    themeToLight: "Switch to light mode",
+    themeToDark: "Switch to dark mode",
   },
   es: {
     subtitle: "selector de números aleatorios",
@@ -369,6 +452,8 @@ const STRINGS = {
     err_int: "N y M deben ser números enteros.",
     err_zero: "N y M deben ser mayores que cero.",
     err_range: "No se pueden elegir {n} números únicos del 1…{m}.",
+    themeToLight: "Cambiar a modo claro",
+    themeToDark: "Cambiar a modo oscuro",
   },
   gl: {
     subtitle: "selector de números aleatorios",
@@ -378,6 +463,8 @@ const STRINGS = {
     err_int: "N e M deben ser números enteiros.",
     err_zero: "N e M deben ser maiores que cero.",
     err_range: "Non se poden escoller {n} números únicos do 1…{m}.",
+    themeToLight: "Cambiar a modo claro",
+    themeToDark: "Cambiar a modo escuro",
   },
   eo: {
     subtitle: "hazarda nombro-elektilo",
@@ -387,25 +474,54 @@ const STRINGS = {
     err_int: "N kaj M devas esti entjeroj.",
     err_zero: "N kaj M devas esti pli grandaj ol nulo.",
     err_range: "Ne eblas elekti {n} unikajn nombrojn el 1…{m}.",
+    themeToLight: "Ŝanĝi al luma reĝimo",
+    themeToDark: "Ŝanĝi al malluma reĝimo",
   },
 };
 
-const FLAGS = {
-  en: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="40" fill="#fff"/><rect x="24" y="0" width="12" height="40" fill="#CE1124"/><rect x="0" y="14" width="60" height="12" fill="#CE1124"/></svg>`,
-  gl: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="40" fill="#fff"/><polygon points="0,0 18,0 60,40 42,40" fill="#009BDE"/></svg>`,
-  es: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="40" fill="#c60b1e"/><rect y="13.33" width="60" height="13.34" fill="#FFCC00"/><rect y="26.67" width="60" height="13.33" fill="#c60b1e"/></svg>`,
-  eo: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="40" fill="#009900"/><rect width="20" height="13.33" fill="#ffffff"/><polygon fill="#009900" points="10,1.87 10.93,4.8 14,4.8 11.53,6.53 12.47,9.47 10,7.73 7.53,9.47 8.47,6.53 6,4.8 9.07,4.8" /></svg>`,
-};
+const FLAG_EN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="40" fill="#fff"/><rect x="24" y="0" width="12" height="40" fill="#CE1124"/><rect x="0" y="14" width="60" height="12" fill="#CE1124"/></svg>`;
+const FLAG_GL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="40" fill="#fff"/><polygon points="0,0 18,0 60,40 42,40" fill="#009BDE"/></svg>`;
+const FLAG_ES = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="40" fill="#c60b1e"/><rect y="13.33" width="60" height="13.34" fill="#FFCC00"/><rect y="26.67" width="60" height="13.33" fill="#c60b1e"/></svg>`;
+const FLAG_EO = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="40" fill="#009900"/><rect width="20" height="13.33" fill="#ffffff"/><polygon fill="#009900" points="10,1.87 10.93,4.8 14,4.8 11.53,6.53 12.47,9.47 10,7.73 7.53,9.47 8.47,6.53 6,4.8 9.07,4.8" /></svg>`;
 
-const LANG_ORDER = ['en', 'gl', 'es', 'eo'];
-
-const COLORS = [
-  '#818cf8','#a78bfa','#e879f9','#38bdf8',
-  '#34d399','#fb923c','#f472b6','#facc15',
-  '#ef4444','#22d3ee',
+// Ordered as they appear in the language menu.
+const LANGUAGES = [
+  { code: 'en', flag: FLAG_EN, name: 'English' },
+  { code: 'gl', flag: FLAG_GL, name: 'Galego' },
+  { code: 'es', flag: FLAG_ES, name: 'Español' },
+  { code: 'eo', flag: FLAG_EO, name: 'Esperanto' },
 ];
+const SUPPORTED_LANGS = LANGUAGES.map(l => l.code);
+const LANG_BY_CODE = {};
+LANGUAGES.forEach(l => LANG_BY_CODE[l.code] = l);
 
-let lang = localStorage.getItem('lang') || 'en';
+// Gruvbox's own light/dark swatches: faded tones read on the cream bg0,
+// bright tones read on the near-black bg0 — using bright on both made
+// light mode feel drenched in yellow/orange.
+const COLORS_LIGHT = [
+  '#9d0006', '#af3a03', '#b57614', '#79740e',
+  '#427b58', '#076678', '#8f3f71', '#d65d0e',
+];
+const COLORS_DARK = [
+  '#fb4934', '#fe8019', '#fabd2f', '#b8bb26',
+  '#8ec07c', '#83a598', '#d3869b', '#d65d0e',
+];
+function chipColors() {
+  return effectiveTheme() === 'dark' ? COLORS_DARK : COLORS_LIGHT;
+}
+
+function detectLang() {
+  const stored = localStorage.getItem('lang');
+  if (stored && SUPPORTED_LANGS.includes(stored)) return stored;
+  const candidates = navigator.languages || [navigator.language || 'en'];
+  for (const c of candidates) {
+    const code = (c || '').slice(0, 2).toLowerCase();
+    if (SUPPORTED_LANGS.includes(code)) return code;
+  }
+  return 'en';
+}
+
+let lang = detectLang();
 let selected = [];
 
 function t(key, vars = {}) {
@@ -422,45 +538,81 @@ function applyLang() {
   document.getElementById('draw-label').textContent = t('draw');
   document.getElementById('clear-label').textContent = t('clear');
   document.getElementById('hint-text').textContent = t('hint');
-  document.getElementById('lang-current').title = lang.toUpperCase();
-  document.getElementById('lang-current').innerHTML = FLAGS[lang];
   hideError();
-  renderDropdown();
+  applyTheme(effectiveTheme());
+  updateLangTrigger();
 }
 
-function renderDropdown() {
-  const dd = document.getElementById('lang-dropdown');
-  dd.innerHTML = '';
-  LANG_ORDER.filter(c => c !== lang).forEach(code => {
-    const btn = document.createElement('button');
-    btn.className = 'lang-option';
-    btn.title = code.toUpperCase();
-    btn.innerHTML = FLAGS[code];
-    btn.addEventListener('click', () => selectLang(code));
-    dd.appendChild(btn);
+/* ── theme ── */
+function effectiveTheme() {
+  const stored = localStorage.getItem('theme');
+  if (stored) return stored;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('theme-toggle');
+  btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  btn.setAttribute('aria-label', theme === 'dark' ? t('themeToLight') : t('themeToDark'));
+  btn.title = btn.getAttribute('aria-label');
+}
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
+  applyTheme(next);
+  renderResults();
+});
+
+/* ── language picker ── */
+const langTrigger = document.getElementById('lang-trigger');
+const langMenu = document.getElementById('lang-menu');
+const langTriggerFlag = document.getElementById('lang-trigger-flag');
+const langTriggerName = document.getElementById('lang-trigger-name');
+let langMenuOpen = false;
+
+LANGUAGES.forEach(l => {
+  const li = document.createElement('li');
+  li.setAttribute('role', 'presentation');
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'lang-option';
+  btn.setAttribute('role', 'option');
+  btn.innerHTML = `<span class="flag">${l.flag}</span><span>${l.name}</span>`;
+  btn.addEventListener('click', () => {
+    lang = l.code;
+    localStorage.setItem('lang', l.code);
+    closeLangMenu();
+    applyLang();
+  });
+  li.appendChild(btn);
+  langMenu.appendChild(li);
+});
+
+function updateLangTrigger() {
+  const l = LANG_BY_CODE[lang];
+  langTriggerFlag.innerHTML = l.flag;
+  langTriggerName.textContent = l.name;
+  Array.prototype.forEach.call(langMenu.querySelectorAll('.lang-option'), (btn, i) => {
+    btn.setAttribute('aria-selected', String(LANGUAGES[i].code === lang));
   });
 }
 
-function selectLang(code) {
-  lang = code;
-  localStorage.setItem('lang', code);
-  closeDropdown();
-  applyLang();
+function openLangMenu() {
+  langMenuOpen = true;
+  langMenu.hidden = false;
+  langTrigger.setAttribute('aria-expanded', 'true');
+}
+function closeLangMenu() {
+  langMenuOpen = false;
+  langMenu.hidden = true;
+  langTrigger.setAttribute('aria-expanded', 'false');
 }
 
-let dropdownOpen = false;
-function toggleDropdown() {
-  dropdownOpen = !dropdownOpen;
-  document.getElementById('lang-dropdown').classList.toggle('open', dropdownOpen);
-}
-function closeDropdown() {
-  dropdownOpen = false;
-  document.getElementById('lang-dropdown').classList.remove('open');
-}
-
-document.getElementById('lang-current').addEventListener('click', toggleDropdown);
+langTrigger.addEventListener('click', () => { langMenuOpen ? closeLangMenu() : openLangMenu(); });
 document.addEventListener('click', e => {
-  if (!document.getElementById('lang-switcher').contains(e.target)) closeDropdown();
+  if (langMenuOpen && !e.target.closest('.lang-picker')) closeLangMenu();
 });
 
 function showError(msg) {
@@ -473,16 +625,17 @@ function hideError() {
 }
 
 function buildChip(number, idx) {
-  const color = COLORS[idx % COLORS.length];
+  const palette = chipColors();
+  const color = palette[idx % palette.length];
   const col = document.createElement('div');
   col.className = 'chip-col';
   const rank = document.createElement('div');
   rank.className = 'chip-rank';
-  rank.style.color = color + '99';
+  rank.style.color = color;
   rank.textContent = `#${idx + 1}`;
   const box = document.createElement('div');
   box.className = 'chip-box';
-  box.style.borderColor = color + '88';
+  box.style.borderColor = color;
   box.style.boxShadow = `0 4px 24px 0 ${color}33`;
   box.textContent = number;
   col.appendChild(rank);
@@ -546,7 +699,7 @@ function onClear() {
 document.getElementById('draw-btn').addEventListener('click', onDraw);
 document.getElementById('clear-btn').addEventListener('click', onClear);
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { if (dropdownOpen) closeDropdown(); else onClear(); }
+  if (e.key === 'Escape') { if (langMenuOpen) closeLangMenu(); else onClear(); }
   if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === document.getElementById('draw-btn')) return;
   if (e.key === 'Enter' && !['INPUT','BUTTON'].includes(document.activeElement.tagName)) onDraw();
 });
